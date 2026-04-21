@@ -11,21 +11,25 @@ Esta es una imagen personalizada de `jwilder/nginx-proxy` que incluye optimizaci
   - `proxy_connect_timeout 600s;`
   - `proxy_send_timeout 600s;`
 
-## Build y Push
+## Build y Push (Multi-plataforma)
 
-Para construir y subir la imagen al registro:
+Para construir y subir la imagen para múltiples arquitecturas (AMD64, ARM64 de Mac, y Raspberry Pi):
 
 ```bash
-# Definir el nombre y tag de la imagen
-IMAGE_NAME="jefecito/nginx-proxy"
-TAG="latest"
-
-# Construir la imagen
-docker build -t ${IMAGE_NAME}:${TAG} .
-
-# Subir la imagen
-docker push ${IMAGE_NAME}:${TAG}
+docker buildx build \
+  --platform linux/amd64,linux/arm64,linux/arm/v7 \
+  -t jefecito/nginx-proxy:latest \
+  --push .
 ```
+
+### Notas sobre Arquitecturas:
+- **`linux/amd64`**: Para equipos con procesadores Intel/AMD (ej. tu Asus con AMD).
+- **`linux/arm64`**: Para equipos Apple Silicon (Mac M1/M2/M3/M4) y Raspberry Pi con OS de 64 bits.
+- **`linux/arm/v7`**: Para modelos antiguos de Raspberry Pi o sistemas de 32 bits.
+
+> [!TIP]
+> Si recibes un error sobre `buildx` no encontrado, consulta la sección de resolución de problemas o asegúrate de tenerlo instalado y configurado como plugin de Docker.
+
 
 ## Uso
 
